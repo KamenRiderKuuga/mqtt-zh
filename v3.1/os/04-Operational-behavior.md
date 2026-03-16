@@ -1,1 +1,0 @@
-# 4 Operational behavior
