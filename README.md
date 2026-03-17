@@ -24,7 +24,7 @@
 
 ## 关于 OASIS 官方目录说明
 
-如 OASIS 官方文档仓库（例如 `Index of /mqtt/mqtt/v5.0/`）所示，不同目录代表标准制定过程的不同推进阶段：
+如 [OASIS 官方 MQTT 文档仓库](https://docs.oasis-open.org/mqtt/mqtt/)（例如 `Index of /mqtt/mqtt/v5.0/`）所示，不同目录代表标准制定过程的不同推进阶段：
 - **csprdXX**：Committee Specification Public Review Draft（委员会规范公开审查草案）
 - **csXX**：Committee Specification（委员会规范）
 - **cosXX**：Committee Specification OASIS Standard（成为 OASIS 标准的委员会规范）
