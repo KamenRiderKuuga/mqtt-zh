@@ -193,7 +193,7 @@ MQTT 根据这里定义的 `Quality of Service` (`QoS`) 级别传递 `Applicatio
 
 ## 4.7 `Topic Names` 和 `Topic Filters`
 
-### 4.7.1 Topic wildcards
+### 4.7.1 主题通配符（Topic wildcards）
 
 `Topic level separator` 用于在 `Topic Name` 中引入结构。如果存在，它将 `Topic Name` 分为多个"topic levels"。
 
@@ -270,15 +270,15 @@ MQTT 根据这里定义的 `Quality of Service` (`QoS`) 级别传递 `Applicatio
 - 前导或尾随的 "/" 创建一个独特的 `Topic Name` 或 `Topic Filter`
 - 仅由 "/" 字符组成的 `Topic Name` 或 `Topic Filter` 是有效的
 - **`Topic Names` 和 `Topic Filters` 禁止包含空字符（Unicode U+0000）** [Unicode] [MQTT-4.7.3-2]
-- **`Topic Names` 和 `Topic Filters` 是 UTF-8 编码字符串，它们的编码禁止超过 65535 字节** [MQTT-4.7.3-3]。参见第 1.5.3 节
+- **`Topic Names` 和 `Topic Filters` 是 `UTF-8` 编码字符串，它们的编码禁止超过 65535 字节** [MQTT-4.7.3-3]。参见第 1.5.3 节
 
-除了 UTF-8 编码字符串的整体长度所施加的限制外，`Topic Name` 或 `Topic Filter` 中的级别数量没有限制。
+除了 `UTF-8` 编码字符串的整体长度所施加的限制外，`Topic Name` 或 `Topic Filter` 中的级别数量没有限制。
 
 **当执行订阅匹配时，`Server` 禁止对 `Topic Names` 或 `Topic Filters` 执行任何规范化，或对无法识别的字符进行任何修改或替换** [MQTT-4.7.3-4]。`Topic Filter` 中的每个非通配级别必须逐字符匹配 `Topic Name` 中的相应级别，匹配才能成功。
 
 > **非规范性说明**
 
-UTF-8 编码规则意味着可以通过比较编码的 UTF-8 字节或比较解码的 Unicode 字符来执行 `Topic Filter` 和 `Topic Name` 的比较
+`UTF-8` 编码规则意味着可以通过比较编码的 `UTF-8` 字节或比较解码的 `Unicode` 字符来执行 `Topic Filter` 和 `Topic Name` 的比较
 
 > **非规范性说明**
 

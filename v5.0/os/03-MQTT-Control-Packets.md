@@ -6,7 +6,7 @@
 
 `Client` 只能通过网络连接发送一次 `CONNECT` 报文。`Server` 必须将 `Client` 发送的第二个 `CONNECT` 报文视为协议错误并关闭网络连接 [MQTT-3.1.2-2]。有关错误处理的信息，请参阅 [第 4.13 节](#4-13-错误处理)。
 
-`Payload` 包含一个或多个编码字段。它们指定了 `Client` 的唯一 `Client Identifier`、`Will Topic`、Will Payload、`User Name` 和 `Password`。除了 `Client Identifier` 之外，其他字段都可以省略，它们是否存在由 `Variable Header` 中的标志决定。
+`Payload` 包含一个或多个编码字段。它们指定了 `Client` 的唯一 `Client Identifier`、`Will Topic`、`Will Payload`、`User Name` 和 `Password`。除了 `Client Identifier` 之外，其他字段都可以省略，它们是否存在由 `Variable Header` 中的标志决定。
 
 ### 3.1.1 CONNECT `Fixed Header`
 
@@ -14,9 +14,9 @@
 
 | Bit | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 |
 |-----|---|---|---|---|---|---|---|---|
-| byte 1 | MQTT Control Packet type (1) | Reserved |
+| byte 1 | `MQTT Control Packet type` (1) | `Reserved` |
 | | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 |
-| byte 2 | Remaining Length |
+| byte 2 | `Remaining Length` |
 
 **`Remaining Length` 字段**
 
@@ -24,7 +24,7 @@
 
 ### 3.1.2 CONNECT `Variable Header`
 
-`CONNECT` 报文的 `Variable Header` 按顺序包含以下字段：Protocol Name、Protocol Level、Connect Flags、`Keep Alive` 和 Properties。属性编码规则在 [第 2.2.2 节](#222-properties) 中描述。
+`CONNECT` 报文的 `Variable Header` 按顺序包含以下字段：`Protocol Name`、`Protocol Level`、`Connect Flags`、`Keep Alive` 和 `Properties`。属性编码规则在 [第 2.2.2 节](#222-properties) 中描述。
 
 #### 3.1.2.1 Protocol Name
 
@@ -40,13 +40,13 @@
 | byte 5 | 'T' | 0 | 1 | 0 | 1 | 0 | 1 | 0 | 0 |
 | byte 6 | 'T' | 0 | 1 | 0 | 1 | 0 | 1 | 0 | 0 |
 
-Protocol Name 是一个 `UTF-8 Encoded String`，表示协议名称 "MQTT"，按所示大写。该字符串、其偏移量和长度不会因 MQTT 规范的未来版本而改变。
+`Protocol Name` 是一个 `UTF-8 Encoded String`，表示协议名称 "MQTT"，按所示大写。该字符串、其偏移量和长度不会因 MQTT 规范的未来版本而改变。
 
-支持多种协议的 `Server` 使用 Protocol Name 来确定数据是否为 MQTT。协议名称必须是 UTF-8 字符串 "MQTT"。如果 `Server` 不想接受 `CONNECT`，并希望表明它是一个 MQTT `Server`，它可以发送一个 `Reason Code` 为 0x84（不支持的协议版本）的 `CONNACK` 报文，然后必须关闭网络连接 [MQTT-3.1.2-1]。
+支持多种协议的 `Server` 使用 `Protocol Name` 来确定数据是否为 MQTT。协议名称必须是 `UTF-8` 字符串 "MQTT"。如果 `Server` 不想接受 `CONNECT`，并希望表明它是一个 MQTT `Server`，它可以发送一个 `Reason Code` 为 0x84（不支持的协议版本）的 `CONNACK` 报文，然后必须关闭网络连接 [MQTT-3.1.2-1]。
 
 > **非规范性注释**
 >
-> 报文检查器（如防火墙）可以使用 Protocol Name 来识别 MQTT 流量。
+> 报文检查器（如防火墙）可以使用 `Protocol Name` 来识别 MQTT 流量。
 
 #### 3.1.2.2 Protocol Version
 
@@ -57,13 +57,13 @@ Protocol Name 是一个 `UTF-8 Encoded String`，表示协议名称 "MQTT"，按
 | Protocol Level |
 | byte 7 | Version (5) | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 1 |
 
-表示 `Client` 使用的协议修订级别的单字节无符号值。协议版本 5.0 的 Protocol Version 字段值为 5 (0x05)。
+表示 `Client` 使用的协议修订级别的单字节无符号值。协议版本 5.0 的 `Protocol Version` 字段值为 5 (0x05)。
 
-支持多个 MQTT 协议版本的 `Server` 使用 Protocol Version 来确定 `Client` 使用的 MQTT 版本。如果 Protocol Version 不是 5，并且 `Server` 不想接受 `CONNECT` 报文，`Server` 可以发送一个 `Reason Code` 为 0x84（不支持的协议版本）的 `CONNACK` 报文，然后必须关闭网络连接 [MQTT-3.1.2-2]。
+支持多个 MQTT 协议版本的 `Server` 使用 `Protocol Version` 来确定 `Client` 使用的 MQTT 版本。如果 `Protocol Version` 不是 5，并且 `Server` 不想接受 `CONNECT` 报文，`Server` 可以发送一个 `Reason Code` 为 0x84（不支持的协议版本）的 `CONNACK` 报文，然后必须关闭网络连接 [MQTT-3.1.2-2]。
 
 #### 3.1.2.3 Connect Flags
 
-Connect Flags 字节包含多个指定 MQTT 连接行为的参数。它还指示 `Payload` 中字段的存在或缺失。
+`Connect Flags` 字节包含多个指定 MQTT 连接行为的参数。它还指示 `Payload` 中字段的存在或缺失。
 
 **图 3-4 - Connect Flag 位**
 
@@ -72,13 +72,13 @@ Connect Flags 字节包含多个指定 MQTT 连接行为的参数。它还指示
 | | User Name Flag | Password Flag | Will Retain | Will QoS | Will Flag | Clean Start | Reserved |
 | byte 8 | X | X | X | X | X | X | X | 0 |
 
-`Server` 必须验证 `CONNECT` 报文中的保留标志设置为 0 [MQTT-3.1.2-3]。如果保留标志不为 0，则为格式错误报文（Malformed Packet）。有关错误处理的信息，请参阅 [第 4.13 节](#4-13-错误处理)。
+`Server` 必须验证 `CONNECT` 报文中的保留标志设置为 0 [MQTT-3.1.2-3]。如果保留标志不为 0，则为格式错误报文（`Malformed Packet`）。有关错误处理的信息，请参阅 [第 4.13 节](#4-13-错误处理)。
 
 #### 3.1.2.4 Clean Start
 
-**位置：** Connect Flags 字节的第 1 位。
+**位置：** `Connect Flags` 字节的第 1 位。
 
-此位指定连接是开始新会话还是继续现有会话。有关 `Session` State 的定义，请参阅 [第 4.1 节](#41-session-state)。
+此位指定连接是开始新会话还是继续现有会话。有关 `Session State` 的定义，请参阅 [第 4.1 节](#41-session-state)。
 
 如果收到 `Clean Start` 设置为 1 的 `CONNECT` 报文，`Client` 和 `Server` 必须丢弃任何现有会话并开始新会话 [MQTT-3.1.2-4]。因此，如果 `Clean Start` 设置为 1，`CONNACK` 中的 `Session` Present 标志始终设置为 0。
 
@@ -88,7 +88,7 @@ Connect Flags 字节包含多个指定 MQTT 连接行为的参数。它还指示
 
 **位置：** Connect Flags 的第 2 位。
 
-如果 Will Flag 设置为 1，表示必须在 `Server` 上存储 `Will Message` 并将其与会话关联 [MQTT-3.1.2-7]。`Will Message` 由 `CONNECT` `Payload` 中的 Will Properties、`Will Topic` 和 Will Payload 字段组成。必须在网络连接随后关闭且 `Will Delay Interval` 已过或会话结束后发布 `Will Message`，除非 `Server` 在收到 `Reason Code` 为 0x00（正常断开连接）的 `DISCONNECT` 报文时删除了 `Will Message`，或者在 `Will Delay Interval` 过期之前为 ClientID 打开了新的网络连接 [MQTT-3.1.2-8]。
+如果 Will Flag 设置为 1，表示必须在 `Server` 上存储 `Will Message` 并将其与会话关联 [MQTT-3.1.2-7]。`Will Message` 由 `CONNECT` `Payload` 中的 `Will Properties`、`Will Topic` 和 `Will Payload` 字段组成。必须在网络连接随后关闭且 `Will Delay Interval` 已过或会话结束后发布 `Will Message`，除非 `Server` 在收到 `Reason Code` 为 0x00（正常断开连接）的 `DISCONNECT` 报文时删除了 `Will Message`，或者在 `Will Delay Interval` 过期之前为 ClientID 打开了新的网络连接 [MQTT-3.1.2-8]。
 
 `Will Message` 发布的情况包括但不限于：
 
@@ -97,11 +97,11 @@ Connect Flags 字节包含多个指定 MQTT 连接行为的参数。它还指示
 - `Client` 关闭网络连接而未先发送 `Reason Code` 为 0x00（正常断开连接）的 `DISCONNECT` 报文。
 - `Server` 关闭网络连接而未先收到 `Reason Code` 为 0x00（正常断开连接）的 `DISCONNECT` 报文。
 
-如果 Will Flag 设置为 1，`Payload` 中必须包含 Will Properties、`Will Topic` 和 Will Payload 字段 [MQTT-3.1.2-9]。一旦 `Will Message` 被发布或 `Server` 从 `Client` 收到 `Reason Code` 为 0x00（正常断开连接）的 `DISCONNECT` 报文，必须从 `Server` 存储的 `Session` State 中删除 `Will Message` [MQTT-3.1.2-10]。
+如果 Will Flag 设置为 1，`Payload` 中必须包含 `Will Properties`、`Will Topic` 和 `Will Payload` 字段 [MQTT-3.1.2-9]。一旦 `Will Message` 被发布或 `Server` 从 `Client` 收到 `Reason Code` 为 0x00（正常断开连接）的 `DISCONNECT` 报文，必须从 `Server` 存储的 `Session State` 中删除 `Will Message` [MQTT-3.1.2-10]。
 
-`Server` 应该在网络连接关闭且 `Will Delay Interval` 过去后，或者在会话结束时（以先发生者为准），及时发布 Will Messages。在 `Server` 关闭或故障的情况下，`Server` 可以推迟 Will Messages 的发布直到后续重新启动。如果发生这种情况，从 `Server` 故障到 `Will Message` 发布之间可能会有延迟。
+`Server` 应该在网络连接关闭且 `Will Delay Interval` 过去后，或者在会话结束时（以先发生者为准），及时发布 `Will Messages`。在 `Server` 关闭或故障的情况下，`Server` 可以推迟 `Will Messages` 的发布直到后续重新启动。如果发生这种情况，从 `Server` 故障到 `Will Message` 发布之间可能会有延迟。
 
-有关 Will Delay Interval 的信息，请参阅 [第 3.1.3.2 节](#3132-will-delay-interval)。
+有关 `Will Delay Interval` 的信息，请参阅 [第 3.1.3.2 节](#3132-will-delay-interval)。
 
 > **非规范性注释**
 >
@@ -115,7 +115,7 @@ Connect Flags 字节包含多个指定 MQTT 连接行为的参数。它还指示
 
 如果 Will Flag 设置为 0，则 Will `QoS` 必须设置为 0 (0x00) [MQTT-3.1.2-11]。
 
-如果 Will Flag 设置为 1，Will `QoS` 的值可以是 0 (0x00)、1 (0x01) 或 2 (0x02) [MQTT-3.1.2-12]。值为 3 (0x03) 是格式错误报文（Malformed Packet）。有关错误处理的信息，请参阅 [第 4.13 节](#4-13-错误处理)。
+如果 Will Flag 设置为 1，Will `QoS` 的值可以是 0 (0x00)、1 (0x01) 或 2 (0x02) [MQTT-3.1.2-12]。值为 3 (0x03) 是格式错误报文（`Malformed Packet`）。有关错误处理的信息，请参阅 [第 4.13 节](#4-13-错误处理)。
 
 #### 3.1.2.7 Will Retain
 
@@ -150,17 +150,17 @@ Connect Flags 字节包含多个指定 MQTT 连接行为的参数。它还指示
 | byte 9 | `Keep Alive` MSB |
 | byte 10 | `Keep Alive` LSB |
 
-`Keep Alive` 是一个双字节整数，是以秒为单位的时间间隔。它是允许从 `Client` 完成传输一个 MQTT Control Packet 到开始发送下一个 MQTT Control Packet 之间经过的最大时间间隔。`Client` 有责任确保发送 MQTT Control Packets 之间的间隔不超过 `Keep Alive` 值。如果 `Keep Alive` 非零且没有发送任何其他 MQTT Control Packets，`Client` 必须发送 `PINGREQ` 报文 [MQTT-3.1.2-20]。
+`Keep Alive` 是一个双字节整数，是以秒为单位的时间间隔。它是允许从 `Client` 完成传输一个 `MQTT Control Packet` 到开始发送下一个 `MQTT Control Packet` 之间经过的最大时间间隔。`Client` 有责任确保发送 `MQTT Control Packets` 之间的间隔不超过 `Keep Alive` 值。如果 `Keep Alive` 非零且没有发送任何其他 `MQTT Control Packets`，`Client` 必须发送 `PINGREQ` 报文 [MQTT-3.1.2-20]。
 
-如果 `Server` 在 `CONNACK` 报文上返回 Server Keep Alive，`Client` 必须使用该值而不是它作为 `Keep Alive` 发送的值 [MQTT-3.1.2-21]。
+如果 `Server` 在 `CONNACK` 报文上返回 `Server Keep Alive`，`Client` 必须使用该值而不是它作为 `Keep Alive` 发送的值 [MQTT-3.1.2-21]。
 
 `Client` 可以在任何时间发送 `PINGREQ`，无论 `Keep Alive` 值如何，并检查相应的 `PINGRESP` 以确定网络和 `Server` 可用。
 
-如果 `Keep Alive` 值非零，并且 `Server` 在 `Keep Alive` 时间段的一倍半时间内没有从 `Client` 收到 MQTT Control Packet，它必须关闭与 `Client` 的网络连接，就像网络故障一样 [MQTT-3.1.2-22]。
+如果 `Keep Alive` 值非零，并且 `Server` 在 `Keep Alive` 时间段的一倍半时间内没有从 `Client` 收到 `MQTT Control Packet`，它必须关闭与 `Client` 的网络连接，就像网络故障一样 [MQTT-3.1.2-22]。
 
 如果 `Client` 在发送 `PINGREQ` 后在合理时间内没有收到 `PINGRESP` 报文，它应该关闭与 `Server` 的网络连接。
 
-`Keep Alive` 值为 0 具有关闭 `Keep Alive` 机制的效果。如果 `Keep Alive` 为 0，`Client` 不必按任何特定时间表发送 MQTT Control Packets。
+`Keep Alive` 值为 0 具有关闭 `Keep Alive` 机制的效果。如果 `Keep Alive` 为 0，`Client` 不必按任何特定时间表发送 `MQTT Control Packets`。
 
 > **非规范性注释**
 >
@@ -174,7 +174,7 @@ Connect Flags 字节包含多个指定 MQTT 连接行为的参数。它还指示
 
 ##### 3.1.2.11.1 Property Length
 
-`CONNECT` 报文 `Variable Header` 中 Properties 的长度，编码为 `Variable Byte Integer`。
+`CONNECT` 报文 `Variable Header` 中 `Properties` 的长度，编码为 `Variable Byte Integer`。
 
 ##### 3.1.2.11.2 `Session Expiry Interval`
 
@@ -244,13 +244,13 @@ Connect Flags 字节包含多个指定 MQTT 连接行为的参数。它还指示
 >
 > 如果应用程序选择限制 `Maximum Packet Size`，则由应用程序负责选择合适的 `Maximum Packet Size` 值。
 
-报文大小是 MQTT Control Packet 中的总字节数，如 [第 2.1.4 节](#214-remaining-length) 中所定义。`Client` 使用 `Maximum Packet Size` 通知 `Server` 它不会处理超过此限制的报文。
+报文大小是 `MQTT Control Packet` 中的总字节数，如 [第 2.1.4 节](#214-remaining-length) 中所定义。`Client` 使用 `Maximum Packet Size` 通知 `Server` 它不会处理超过此限制的报文。
 
 `Server` 禁止向 `Client` 发送超过 `Maximum Packet Size` 的报文 [MQTT-3.1.2-24]。如果 `Client` 收到超过此限制的报文，这是协议错误，`Client` 使用 `Reason Code` 为 0x95（报文过大）的 `DISCONNECT`，如 [第 4.13 节](#4-13-错误处理) 所述。
 
-当报文太大无法发送时，`Server` 必须丢弃它而不发送，然后表现得好像它已经完成发送该 Application Message [MQTT-3.1.2-25]。
+当报文太大无法发送时，`Server` 必须丢弃它而不发送，然后表现得好像它已经完成发送该 `Application Message` [MQTT-3.1.2-25]。
 
-在 Shared Subscription 的情况下，如果消息太大无法发送给一个或多个 `Client`，但其他 `Client` 可以接收它，`Server` 可以选择丢弃消息而不向任何 `Client` 发送消息，或者向可以接收它的 `Client` 之一发送消息。
+在 `Shared Subscription` 的情况下，如果消息太大无法发送给一个或多个 `Client`，但其他 `Client` 可以接收它，`Server` 可以选择丢弃消息而不向任何 `Client` 发送消息，或者向可以接收它的 `Client` 之一发送消息。
 
 > **非规范性注释**
 >
@@ -328,7 +328,7 @@ Connect Flags 字节包含多个指定 MQTT 连接行为的参数。它还指示
 
 ### 3.1.3 CONNECT `Payload`
 
-`CONNECT` 报文的 `Payload` 包含一个或多个长度前缀字段，它们的存在由 `Variable Header` 中的标志决定。如果存在，这些字段必须按以下顺序出现：`Client Identifier`、Will Properties、`Will Topic`、Will Payload、`User Name`、`Password` [MQTT-3.1.3-1]。
+`CONNECT` 报文的 `Payload` 包含一个或多个长度前缀字段，它们的存在由 `Variable Header` 中的标志决定。如果存在，这些字段必须按以下顺序出现：`Client Identifier`、`Will Properties`、`Will Topic`、`Will Payload`、`User Name`、`Password` [MQTT-3.1.3-1]。
 
 #### 3.1.3.1 `Client Identifier` (ClientID)
 
@@ -352,11 +352,11 @@ ClientID 必须是 [第 1.5.4 节](#154-utf-8-encoded-string) 中定义的 `UTF-
 
 #### 3.1.3.2 Will Properties
 
-如果 Will Flag 设置为 1，Will Properties 是 `Payload` 中的下一个字段。Will Properties 字段定义了 `Will Message` 发布时要发送的 Application Message 属性，以及定义何时发布 `Will Message` 的属性。Will Properties 由 Property Length 和 Properties 组成。
+如果 Will Flag 设置为 1，`Will Properties` 是 `Payload` 中的下一个字段。`Will Properties` 字段定义了 `Will Message` 发布时要发送的 `Application Message` 属性，以及定义何时发布 `Will Message` 的属性。`Will Properties` 由 `Property Length` 和 `Properties` 组成。
 
 ##### 3.1.3.2.1 Property Length
 
-Will Properties 中 Properties 的长度，编码为 `Variable Byte Integer`。
+`Will Properties` 中 `Properties` 的长度，编码为 `Variable Byte Integer`。
 
 ##### 3.1.3.2.2 `Will Delay Interval`
 
@@ -437,7 +437,7 @@ Correlation Data 的值仅对请求消息的发送者和响应消息的接收者
 
 #### 3.1.3.4 Will Payload
 
-如果 Will Flag 设置为 1，Will Payload 是 `Payload` 中的下一个字段。Will Payload 定义要发布到 `Will Topic` 的 Application Message `Payload`，如 [第 3.1.2.5 节](#3125-will-flag) 中所述。此字段由 `Binary Data` 组成。
+如果 Will Flag 设置为 1，`Will Payload` 是 `Payload` 中的下一个字段。`Will Payload` 定义要发布到 `Will Topic` 的 `Application Message` `Payload`，如 [第 3.1.2.5 节](#3125-will-flag) 中所述。此字段由 `Binary Data` 组成。
 
 #### 3.1.3.5 `User Name`
 
@@ -807,7 +807,7 @@ Connect Reason Code 的值如下所示。如果 `Server` 收到格式正确的 `
 
 如果 `Server` 在其对 `Client` 的 `CONNACK` 响应中包含了 `Maximum QoS`，并且收到 `QoS` 大于此值的 `PUBLISH` 报文，则它使用 `DISCONNECT` 并带有 `Reason Code` 0x9B (`QoS` not supported)，如 [第 4.13 节](#413-error-handling)错误处理中所述。
 
-`PUBLISH` 报文禁止将两个 `QoS` 位都设置为 1 [MQTT-3.3.1-4]。如果 `Server` 或 `Client` 收到两个 `QoS` 位都设置为 1 的 `PUBLISH` 报文，这是一个 Malformed Packet。使用 `DISCONNECT` 并带有 `Reason Code` 0x81 (Malformed Packet)，如 [第 4.13 节](#413-error-handling)中所述。
+`PUBLISH` 报文禁止将两个 `QoS` 位都设置为 1 [MQTT-3.3.1-4]。如果 `Server` 或 `Client` 收到两个 `QoS` 位都设置为 1 的 `PUBLISH` 报文，这是一个 `Malformed Packet`。使用 `DISCONNECT` 并带有 `Reason Code` 0x81 (`Malformed Packet`)，如 [第 4.13 节](#413-error-handling)中所述。
 
 #### 3.3.1.3 `RETAIN`
 
@@ -877,7 +877,7 @@ Connect Reason Code 的值如下所示。如果 `Server` 收到格式正确的 `
 后跟 Payload Format Indicator 的值，可以是：
 
 - 0 (0x00) 字节 表示 `Payload` 是未指定的字节，相当于不发送 Payload Format Indicator。
-- 1 (0x01) 字节 表示 `Payload` 是 UTF-8 Encoded Character Data。`Payload` 中的 UTF-8 数据必须是 Unicode 规范 [Unicode] 定义的有效 UTF-8，并在 RFC 3629 [RFC3629] 中重述。
+- 1 (0x01) 字节 表示 `Payload` 是 `UTF-8` Encoded Character Data。`Payload` 中的 `UTF-8` 数据必须是 `Unicode` 规范 [Unicode] 定义的有效 `UTF-8`，并在 RFC 3629 [RFC3629] 中重述。
 
 `Server` 必须将 Payload Format Indicator 不做修改地发送给所有接收 Application Message 的订阅者 [MQTT-3.3.2-4]。接收方可以验证 `Payload` 是否为指示的格式，如果不是，则发送带有 `Reason Code` 0x99 (`Payload` format invalid) 的 `PUBACK`、`PUBREC` 或 `DISCONNECT`，如 [第 4.13 节](#413-error-handling)中所述。有关验证 payload 格式的安全问题，请参阅 [第 5.4.9 节](#549-payload-validation)。
 

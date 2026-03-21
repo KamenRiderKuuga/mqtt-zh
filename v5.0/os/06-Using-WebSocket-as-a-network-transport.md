@@ -2,9 +2,9 @@
 
 如果 `MQTT` 通过 `WebSocket` [RFC6455] 连接传输，则适用以下条件：
 
-- `MQTT` 控制报文必须在 `WebSocket` 二进制数据帧中发送。如果接收到任何其他类型的数据帧，接收者必须关闭网络连接 [MQTT-6.0.0-1]。
+- `MQTT Control Packets` 必须在 `WebSocket` 二进制数据帧中发送。如果接收到任何其他类型的数据帧，接收者必须关闭网络连接 [MQTT-6.0.0-1]。
 
-- 单个 `WebSocket` 数据帧可以包含多个或部分 `MQTT` 控制报文。接收者禁止假设 `MQTT` 控制报文在 `WebSocket` 帧边界上对齐 [MQTT-6.0.0-2]。
+- 单个 `WebSocket` 数据帧可以包含多个或部分 `MQTT Control Packets` 。接收者禁止假设 `MQTT Control Packets` 在 `WebSocket` 帧边界上对齐 [MQTT-6.0.0-2]。
 
 - `Client` 必须在其提供的 `WebSocket` 子协议列表中包含 "mqtt" [MQTT-6.0.0-3]。
 

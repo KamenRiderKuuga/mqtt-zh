@@ -2,27 +2,27 @@
 
 ## 2.1 Structure of an MQTT Control Packet
 
-MQTT 协议通过以定义的方式交换一系列 MQTT Control Packet 来运行。本节描述这些报文的格式。
+`MQTT` 协议通过以定义的方式交换一系列 `MQTT Control Packet` 来运行。本节描述这些报文的格式。
 
-一个 MQTT Control Packet 由最多三部分组成，始终按以下顺序排列，如下所示。
+一个 `MQTT Control Packet` 由最多三部分组成，始终按以下顺序排列，如下所示。
 
 **图 2-1 MQTT Control Packet 的结构**
 
 | 组成部分 |
 |---------|
-| `Fixed Header`，存在于所有 MQTT Control Packet |
-| `Variable Header`，存在于某些 MQTT Control Packet |
-| `Payload`，存在于某些 MQTT Control Packet |
+| `Fixed Header`，存在于所有 `MQTT Control Packet` |
+| `Variable Header`，存在于某些 `MQTT Control Packet` |
+| `Payload`，存在于某些 `MQTT Control Packet` |
 
 ### 2.1.1 Fixed Header
 
-每个 MQTT Control Packet 都包含一个 `Fixed Header`，如下所示。
+每个 `MQTT Control Packet` 都包含一个 `Fixed Header`，如下所示。
 
 **图 2-2 `Fixed Header` 格式**
 
 | Bit | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 |
 |-----|---|---|---|---|---|---|---|---|
-| byte 1 | MQTT Control Packet type | Flags specific to each MQTT Control Packet type |
+| byte 1 | `MQTT Control Packet type` | `Flags specific to each MQTT Control Packet type` |
 | byte 2 | `Remaining Length` |
 
 ### 2.1.2 MQTT Control Packet type
@@ -54,7 +54,7 @@ MQTT 协议通过以定义的方式交换一系列 MQTT Control Packet 来运行
 
 ### 2.1.3 Flags
 
-`Fixed Header` 中 byte 1 的剩余位 [3-0] 包含每个 MQTT Control Packet 类型特定的标志，如下所示。当标志位标记为"Reserved"时，它保留供将来使用，**必须**设置为列出的值 **[MQTT-2.1.3-1]**。如果接收到无效的标志，则这是一个 `Malformed Packet`。有关处理错误的详细信息，请参阅第 4.13 节。
+`Fixed Header` 中 byte 1 的剩余位 [3-0] 包含每个 `MQTT Control Packet` 类型特定的标志，如下所示。当标志位标记为"Reserved"时，它保留供将来使用，**必须**设置为列出的值 **[MQTT-2.1.3-1]**。如果接收到无效的标志，则这是一个 `Malformed Packet`。有关处理错误的详细信息，请参阅第 4.13 节。
 
 **表 2-2 标志位**
 
@@ -88,17 +88,17 @@ MQTT 协议通过以定义的方式交换一系列 MQTT Control Packet 来运行
 
 **位置：** 从 byte 2 开始。
 
-`Remaining Length` 是一个 `Variable Byte Integer`，表示当前 Control Packet 中剩余的字节数，包括 `Variable Header` 和 `Payload` 中的数据。`Remaining Length` 不包括用于编码 `Remaining Length` 本身的字节。报文大小是 MQTT Control Packet 中的总字节数，等于 `Fixed Header` 的长度加上 `Remaining Length`。
+`Remaining Length` 是一个 `Variable Byte Integer`，表示当前 `Control Packet` 中剩余的字节数，包括 `Variable Header` 和 `Payload` 中的数据。`Remaining Length` 不包括用于编码 `Remaining Length` 本身的字节。报文大小是 `MQTT Control Packet` 中的总字节数，等于 `Fixed Header` 的长度加上 `Remaining Length`。
 
 ## 2.2 Variable Header
 
-某些类型的 MQTT Control Packet 包含一个 `Variable Header` 组件。它位于 `Fixed Header` 和 `Payload` 之间。`Variable Header` 的内容因报文类型而异。`Variable Header` 中的 `Packet Identifier` 字段在多种报文类型中都很常见。
+某些类型的 `MQTT Control Packet` 包含一个 `Variable Header` 组件。它位于 `Fixed Header` 和 `Payload` 之间。`Variable Header` 的内容因报文类型而异。`Variable Header` 中的 `Packet Identifier` 字段在多种报文类型中都很常见。
 
 ### 2.2.1 Packet Identifier
 
-许多 MQTT Control Packet 类型的 `Variable Header` 组件都包含一个双字节整数 `Packet Identifier` 字段。这些 MQTT Control Packet 包括：`PUBLISH`（当 `QoS` > 0 时）、`PUBACK`、`PUBREC`、`PUBREL`、`PUBCOMP`、`SUBSCRIBE`、`SUBACK`、`UNSUBSCRIBE`、`UNSUBACK`。
+许多 `MQTT Control Packet` 类型的 `Variable Header` 组件都包含一个双字节整数 `Packet Identifier` 字段。这些 `MQTT Control Packet` 包括：`PUBLISH`（当 `QoS` > 0 时）、`PUBACK`、`PUBREC`、`PUBREL`、`PUBCOMP`、`SUBSCRIBE`、`SUBACK`、`UNSUBSCRIBE`、`UNSUBACK`。
 
-需要 `Packet Identifier` 的 MQTT Control Packet 如下所示：
+需要 `Packet Identifier` 的 `MQTT Control Packet` 如下所示：
 
 **表 2-3 包含 `Packet Identifier` 的 MQTT Control Packet**
 
@@ -122,9 +122,9 @@ MQTT 协议通过以定义的方式交换一系列 MQTT Control Packet 来运行
 
 如果 `PUBLISH` 报文的 `QoS` 值设置为 0，则该报文**禁止**包含 `Packet Identifier` **[MQTT-2.2.1-2]**。
 
-每次 `Client` 发送新的 `SUBSCRIBE`、`UNSUBSCRIBE` 或 `PUBLISH`（当 `QoS` > 0 时）MQTT Control Packet 时，它**必须**为其分配一个当前未使用的非零 `Packet Identifier` **[MQTT-2.2.1-3]**。
+每次 `Client` 发送新的 `SUBSCRIBE`、`UNSUBSCRIBE` 或 `PUBLISH`（当 `QoS` > 0 时）`MQTT Control Packet` 时，它**必须**为其分配一个当前未使用的非零 `Packet Identifier` **[MQTT-2.2.1-3]**。
 
-每次 `Server` 发送新的 `PUBLISH`（当 `QoS` > 0 时）MQTT Control Packet 时，它**必须**为其分配一个当前未使用的非零 `Packet Identifier` **[MQTT-2.2.1-4]**。
+每次 `Server` 发送新的 `PUBLISH`（当 `QoS` > 0 时）`MQTT Control Packet` 时，它**必须**为其分配一个当前未使用的非零 `Packet Identifier` **[MQTT-2.2.1-4]**。
 
 在发送方处理了相应的确认报文后，`Packet Identifier` 变为可重用，定义如下。对于 `QoS` 1 `PUBLISH`，这是相应的 `PUBACK`；对于 `QoS` 2 `PUBLISH`，这是 `PUBCOMP` 或带有大于或等于 128 的 `Reason Code` 的 `PUBREC`。对于 `SUBSCRIBE` 或 `UNSUBSCRIBE`，这是相应的 `SUBACK` 或 `UNSUBACK`。
 
@@ -154,15 +154,15 @@ PUBACK Packet Identifier=0x1234 ──>
 
 `CONNECT`、`CONNACK`、`PUBLISH`、`PUBACK`、`PUBREC`、`PUBREL`、`PUBCOMP`、`SUBSCRIBE`、`SUBACK`、`UNSUBSCRIBE`、`UNSUBACK`、`DISCONNECT` 和 `AUTH` 报文的 `Variable Header` 中的最后一个字段是一组 `Properties`。在 `CONNECT` 报文中，`Payload` 中的 Will Properties 字段还有一组可选的 `Properties`。
 
-`Properties` 集合由 Property Length 和随后的 `Properties` 组成。
+`Properties` 集合由 `Property Length` 和随后的 `Properties` 组成。
 
 #### 2.2.2.1 Property Length
 
-Property Length 编码为 `Variable Byte Integer`。Property Length 不包括用于编码自身的字节，但包括 `Properties` 的长度。如果没有属性，这**必须**通过包含值为零的 Property Length 来表示 **[MQTT-2.2.2-1]**。
+`Property Length` 编码为 `Variable Byte Integer`。`Property Length` 不包括用于编码自身的字节，但包括 `Properties` 的长度。如果没有属性，这**必须**通过包含值为零的 `Property Length` 来表示 **[MQTT-2.2.2-1]**。
 
 #### 2.2.2.2 Property
 
-`Property` 由定义其用途和数据类型的 Identifier 及随后的值组成。Identifier 编码为 `Variable Byte Integer`。包含对其报文类型无效的 Identifier 或包含非指定数据类型的值的 Control Packet 是 `Malformed Packet`。如果收到此类报文，请使用带有 `Reason Code` 0x81（`Malformed Packet`）的 `CONNACK` 或 `DISCONNECT` 报文，如第 4.13 节处理错误中所述。具有不同 Identifier 的 `Properties` 的顺序没有意义。
+`Property` 由定义其用途和数据类型的 `Identifier` 及随后的值组成。`Identifier` 编码为 `Variable Byte Integer`。包含对其报文类型无效的 `Identifier` 或包含非指定数据类型的值的 `Control Packet` 是 `Malformed Packet`。如果收到此类报文，请使用带有 `Reason Code` 0x81（`Malformed Packet`）的 `CONNACK` 或 `DISCONNECT` 报文，如第 4.13 节处理错误中所述。具有不同 `Identifier` 的 `Properties` 的顺序没有意义。
 
 **表 2-4 - Properties**
 
@@ -203,7 +203,7 @@ Property Length 编码为 `Variable Byte Integer`。Property Length 不包括用
 
 ## 2.3 Payload
 
-某些 MQTT Control Packet 包含一个 `Payload` 作为报文的最后部分。在 `PUBLISH` 报文中，这是 `Application Message`。
+某些 `MQTT Control Packet` 包含一个 `Payload` 作为报文的最后部分。在 `PUBLISH` 报文中，这是 `Application Message`。
 
 **表 2-5 - 包含 `Payload` 的 MQTT Control Packet**
 
@@ -286,4 +286,4 @@ Property Length 编码为 `Variable Byte Integer`。Property Length 不包括用
 
 > **非规范性说明**
 >
-> 对于 `Reason Code` 0x91（`Packet Identifier` in use），响应是尝试修复状态，或者通过使用 Clean Start 设置为 1 进行连接来重置 `Session` 状态，或者确定 `Client` 或 `Server` 实现是否存在缺陷。
+> 对于 `Reason Code` 0x91（`Packet Identifier` in use），响应是尝试修复状态，或者通过使用 `Clean Start` 设置为 1 进行连接来重置 `Session` 状态，或者确定 `Client` 或 `Server` 实现是否存在缺陷。
